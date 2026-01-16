@@ -1,176 +1,81 @@
 # 🩺 Diabetes Classification Using Machine Learning
+
 ---
+
 ## 📌 Project Overview
+This project focuses on predicting whether a patient has diabetes based on diagnostic health measurements. A machine learning classification pipeline was built using proper preprocessing, model training, evaluation, and validation techniques.
 
-This project focuses on predicting whether a patient has diabetes based on diagnostic health measurements. A machine learning classification pipeline was built using proper preprocessing, model training, evaluation, and validation techniques to ensure robust generalization and avoid overfitting.
-
-The final model was selected after careful experimentation and hyperparameter tuning, prioritizing model stability and real-world applicability over artificially high accuracy.
+A key feature of this implementation is the use of a **Custom Decision Threshold (0.32)** to prioritize **Recall**—ensuring that high-risk patients are identified even if their symptoms are subtle.
 
 ## 🎯 Objective
-
-- Build a reliable machine learning model to classify diabetes outcomes
-
-- Handle missing values appropriately in medical data
-
-- Reduce overfitting through preprocessing, model tuning, and validation
-
-- Evaluate the model using multiple performance metrics
+* **Reliable Classification**: Build a machine learning model to accurately classify diabetes outcomes.
+* **Medical Data Handling**: Handle missing values (zeros) appropriately using median imputation.
+* **Safety Optimization**: Optimize the trade-off between Precision and Recall for medical safety.
+* **Deployment**: Deploy the model via an interactive **Streamlit** web interface.
 
 ## 📂 Dataset
+* **Source**: Pima Indians Diabetes Dataset
+* **Target Variable**: `Outcome` (1 = Diabetes, 0 = No Diabetes)
+* **Key Features**: Pregnancies, Glucose, Blood Pressure, Skin Thickness, Insulin, BMI, Diabetes Pedigree Function, Age.
 
-**Source**: `Pima Indians Diabetes Dataset`
-
-**Target Variable**: Outcome
-
-`1 → Patient has diabetes`
-
-`0 → Patient does not have diabetes`
-
-**Key Features**
-
-- Pregnancies
-
-- Glucose
-
-- Blood Pressure
-
-- Skin Thickness
-
-- Insulin
-
-- BMI
-
-- Diabetes Pedigree Function
-
-- Age
-
-`⚠️ In medical datasets, zero values in some features represent missing data, not valid measurements.`
+> ⚠️ **Note**: In this dataset, zero values in features like Insulin, BMI, and Glucose represent missing data and are handled during the preprocessing stage.
 
 ## ⚙️ Methodology
+
 ### 1️⃣ Data Preprocessing
+* **Imputation**: Replaced invalid zeros with the median value of the respective column.
+* **Scaling**: Applied `StandardScaler` to ensure all features contribute equally to the model.
+* **Pipeline**: Utilized Scikit-learn `Pipeline` and `ColumnTransformer` to prevent data leakage.
 
-- Identified invalid zero values in medical features
+### 2️⃣ Model Selection & Training
+* **Final Model**: `Gradient Boosting Classifier`
+* **Optimization**: Hyperparameters tuned via `RandomizedSearchCV`.
+* **Threshold Tuning**: Shifted the decision boundary to **0.32** to maximize sensitivity (Recall).
 
-- Replaced missing values using median imputation
+## 📊 Performance Results
+The following results compare the standard model against the optimized version used in the app:
 
-- Applied standard scaling to numerical features
-
-- Implemented preprocessing using Scikit-learn Pipelines and ColumnTransformer
-
-### 2️⃣ Model Selection
-
-*The following considerations guided model choice:*
-
-- Ability to capture non-linear relationships
-
-- Resistance to overfitting
-
-- Stable performance on unseen data
-
-✅ **Final Model**: `Gradient Boosting Classifier`
-
-Key hyperparameters were carefully chosen to control model complexity.
-
-### 3️⃣ Model Training
-
-- Data split using stratified train–test split
-
-- Entire workflow implemented as a single pipeline
-
-- Ensured no data leakage between training and testing
-
-### 4️⃣ Model Evaluation
-
-*The model was evaluated using:*
-
-- Accuracy
-
-- Precision
-
-- Recall
-
-- Confusion Matrix
-
-- ROC–AUC Curve
-
-Evaluation was performed on unseen test data to assess generalization.
-
-**📊 Results**
-| Metric                | Training | Testing |
-|-----------------------|----------|---------|
-| Accuracy              | ~80%     | ~76%    |
-| Precision (Diabetes)  | ~84%     | ~71%    |
-| Recall (Diabetes)     | ~55%     | ~56%    |
-| ROC–AUC               | —        | ~0.72   |
+| Metric | Default (0.50 Threshold) | **Custom (0.32 Threshold)** |
+| :--- | :--- | :--- |
+| **Accuracy** | ~76% | **~71%** |
+| **Recall (Diabetes)** | ~56% | **~85%** |
+| **Precision** | ~71% | **~55%** |
+| **ROC–AUC** | 0.72 | **0.72** |
 
 
-📌 `The small train–test gap (~4%) indicates that the model generalizes well and does not overfit.`
 
-### 🧠 Key Insights
+> **💡 Insight**: While Accuracy dropped slightly, **Recall increased significantly**. In healthcare, it is often better to have a "false alarm" (False Positive) than to miss a diabetic patient entirely (False Negative).
 
-- Perfect training accuracy is not desirable in healthcare ML problems
+## 🖥️ Web Interface
+The project includes a **Streamlit** application (`app.py`) for real-time predictions.
+* **Input**: User-friendly sliders and number inputs for patient metrics.
+* **Logic**: Uses a saved `.pkl` bundle containing the full preprocessing pipeline and threshold.
+* **Output**: Visual risk probability and color-coded status alerts.
 
-- Slightly lower but stable test accuracy indicates better real-world performance
+<img src="web_interface.png" alt="Diabetes Prediction Web Interface" width="500">
 
-- Recall is especially important in medical prediction tasks
-
-- Further accuracy gains were intentionally avoided to prevent overfitting
-
-### 🧪 Why Accuracy Was Finalized
-
-- After hyperparameter tuning and validation:
-
-- Accuracy improvements became marginal
-
-- Risk of overfitting increased with further tuning
-
-- Model stability was prioritized
-
-### 📌 Final decision: Model performance was frozen at a well-generalized state.
-
-#### 💾 Model Saving
-
-*The trained pipeline was saved using joblib:*
-
-`diabetes_prediction_model.pkl`
-
-**This allows easy reuse for:**
-
-- Deployment
-- Inference
-- Future integration
-
-#### 📁 Project Structure
-<pre>
-📦 **diabetes-classification**
+## 📁 Project Structure
+```text
+📦 Diabetes-Classification
  ┣ 📂 dataset
  ┃ ┗ 📄 diabetes.csv
- ┣ 📄 auc.png
- ┣ 📄 diabetes_model.py
- ┣ 📄 diabetes_prediction_ml.ipynb
- ┣ 📄 diabetes_prediction_model.pkl
- ┣ 📄 README.md
-</pre>
+ ┣ 📂 Plots
+ ┃ ┣ 📄 correlation_matrix.png
+ ┃ ┣ 📄 roc_curve.png
+ ┃ ┗ 📄 cm_custom_threshold.png
+ ┣ 📄 app.py                           # Streamlit Application
+ ┣ 📄 diabetes_prediction_ml.py         # Model Training Script
+ ┣ 📄 diabetes_model_with_threshold.pkl # Saved Model Bundle
+ ┣ 📄 diabetes_prediction_ml.ipynb      # Development Notebook
+ ┗ 📄 README.md
+```
 
-### 🚀 Future Improvements
+## 🛠️ Tech Stack
+- Language: Python (Pandas, NumPy)
+- ML Framework: Scikit-learn (ML Pipeline)
 
-- Improve recall for diabetic patients using class weighting
+- Visualization: Matplotlib & Seaborn
 
-- Add feature engineering for enhanced interpretability
+- Web App: Streamlit
 
-- Deploy the model using Streamlit or Flask
-
-- Perform external dataset validation
-
-### 🛠️ Tech Stack
-
-- Python
-
-- NumPy, Pandas
-
-- Scikit-learn
-
-- Matplotlib, Seaborn
-
-- Joblib
----
+- Serialization: Joblib
