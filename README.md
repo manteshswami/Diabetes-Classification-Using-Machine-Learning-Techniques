@@ -1,4 +1,5 @@
 # 🩺 Diabetes Classification Using Machine Learning
+---
 ## 📌 Project Overview
 
 This project focuses on predicting whether a patient has diabetes based on diagnostic health measurements. A machine learning classification pipeline was built using proper preprocessing, model training, evaluation, and validation techniques to ensure robust generalization and avoid overfitting.
@@ -7,23 +8,23 @@ The final model was selected after careful experimentation and hyperparameter tu
 
 ## 🎯 Objective
 
-Build a reliable machine learning model to classify diabetes outcomes
+- Build a reliable machine learning model to classify diabetes outcomes
 
-Handle missing values appropriately in medical data
+- Handle missing values appropriately in medical data
 
-Reduce overfitting through preprocessing, model tuning, and validation
+- Reduce overfitting through preprocessing, model tuning, and validation
 
-Evaluate the model using multiple performance metrics
+- Evaluate the model using multiple performance metrics
 
 ## 📂 Dataset
 
 **Source**: `Pima Indians Diabetes Dataset`
 
-Target Variable: Outcome
+**Target Variable**: Outcome
 
-1 → Patient has diabetes
+`1 → Patient has diabetes`
 
-0 → Patient does not have diabetes
+`0 → Patient does not have diabetes`
 
 **Key Features**
 
@@ -140,6 +141,7 @@ Evaluation was performed on unseen test data to assess generalization.
 - Future integration
 
 #### 📁 Project Structure
+<pre>
 📦 **diabetes-classification**
  ┣ 📂 dataset
  ┃ ┗ 📄 diabetes.csv
@@ -148,7 +150,7 @@ Evaluation was performed on unseen test data to assess generalization.
  ┣ 📄 diabetes_prediction_ml.ipynb
  ┣ 📄 diabetes_prediction_model.pkl
  ┣ 📄 README.md
-
+</pre>
 
 ### 🚀 Future Improvements
 
@@ -171,3 +173,4 @@ Evaluation was performed on unseen test data to assess generalization.
 - Matplotlib, Seaborn
 
 - Joblib
+---
